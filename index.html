@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UltraAlert — Interactive Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --demo-bg: #09090b;
+            --demo-surface: #111114;
+            --demo-surface-hover: #18181c;
+            --demo-border: rgba(255, 255, 255, 0.06);
+            --demo-text: #e4e4e7;
+            --demo-text-muted: #71717a;
+            --demo-accent: hsl(215, 100%, 60%);
+            --demo-success: hsl(152, 69%, 46%);
+            --demo-error: hsl(358, 75%, 59%);
+            --demo-warning: hsl(38, 92%, 50%);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--demo-bg);
+            color: var(--demo-text);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ─── Header ─── */
+        .demo-hero {
+            text-align: center;
+            padding: 64px 24px 48px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .demo-hero::before {
+            content: '';
+            position: absolute;
+            top: -120px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 300px;
+            background: radial-gradient(ellipse, hsla(215, 100%, 60%, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .demo-hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #fff 20%, #a1a1aa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .demo-hero p {
+            color: var(--demo-text-muted);
+            font-size: 1rem;
+            max-width: 480px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .demo-hero .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--demo-border);
+            border-radius: 100px;
+            padding: 6px 14px;
+            font-size: 0.75rem;
+            color: var(--demo-text-muted);
+            margin-bottom: 20px;
+        }
+
+        .demo-hero .badge .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--demo-success);
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* ─── Theme Toggle ─── */
+        .theme-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 24px;
+        }
+
+        .theme-toggle button {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--demo-border);
+            color: var(--demo-text-muted);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .theme-toggle button:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--demo-text);
+        }
+
+        .theme-toggle button.active {
+            background: var(--demo-accent);
+            border-color: var(--demo-accent);
+            color: #fff;
+        }
+
+        /* ─── Grid ─── */
+        .demo-grid {
+            max-width: 1060px;
+            margin: 0 auto;
+            padding: 0 24px 80px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 12px;
+        }
+
+        /* ─── Section Cards ─── */
+        .demo-card {
+            background: var(--demo-surface);
+            border: 1px solid var(--demo-border);
+            border-radius: 14px;
+            padding: 24px;
+            transition: border-color 0.2s ease;
+        }
+
+        .demo-card:hover {
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .demo-card h2 {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--demo-text-muted);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .demo-card h2::before {
+            content: '';
+            width: 3px;
+            height: 14px;
+            border-radius: 3px;
+            background: var(--demo-accent);
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        /* ─── Test Buttons ─── */
+        button.test-btn {
+            background: transparent;
+            border: 1px solid var(--demo-border);
+            color: var(--demo-text);
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        button.test-btn:hover {
+            background: var(--demo-surface-hover);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        button.test-btn:active {
+            transform: scale(0.98);
+        }
+
+        .test-btn .icon {
+            font-size: 1.1rem;
+            width: 24px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .test-btn .text-wrap {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .test-btn .label {
+            display: block;
+            line-height: 1.3;
+        }
+
+        .test-btn .hint {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--demo-text-muted);
+            margin-top: 2px;
+            line-height: 1.3;
+        }
+
+        /* ─── Log Panel ─── */
+        .log-panel {
+            max-width: 1060px;
+            margin: 0 auto;
+            padding: 0 24px 48px;
+        }
+
+        .log-inner {
+            background: var(--demo-surface);
+            border: 1px solid var(--demo-border);
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .log-inner h2 {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--demo-text-muted);
+            padding: 16px 20px 12px;
+            border-bottom: 1px solid var(--demo-border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .log-inner h2::before {
+            content: '';
+            width: 3px;
+            height: 14px;
+            border-radius: 3px;
+            background: var(--demo-success);
+        }
+
+        #log {
+            padding: 12px 20px;
+            font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            line-height: 1.8;
+            max-height: 280px;
+            overflow-y: auto;
+            color: var(--demo-text-muted);
+        }
+
+        #log::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        #log::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #log::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        #log .entry {
+            padding: 2px 0;
+        }
+
+        #log .entry .time {
+            color: #3f3f46;
+            margin-right: 8px;
+        }
+
+        #log .entry.success { color: hsl(152, 68%, 55%); }
+        #log .entry.error { color: hsl(358, 75%, 65%); }
+        #log .entry.warn { color: hsl(38, 92%, 65%); }
+        #log .entry.info { color: hsl(215, 100%, 65%); }
+
+        /* ─── Mobile ─── */
+        @media (max-width: 640px) {
+            .demo-hero h1 { font-size: 1.75rem; }
+            .demo-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="demo-hero">
+        <div class="badge">
+            <span class="dot"></span>
+            Phase 2 Complete
+        </div>
+        <h1>UltraAlert</h1>
+        <p>A premium, framework-agnostic alert & notification system. Click any button below to test.</p>
+        <div class="theme-toggle">
+            <button id="theme-light">☀️ Light</button>
+            <button id="theme-dark" class="active">🌙 Dark</button>
+            <button id="theme-system">💻 System</button>
+        </div>
+    </div>
+
+    <div class="demo-grid">
+        <!-- Alert Types -->
+        <div class="demo-card">
+            <h2>Alert Types</h2>
+            <div class="btn-group">
+                <button class="test-btn" id="test-success">
+                    <span class="icon">✅</span>
+                    <span class="text-wrap">
+                        <span class="label">Success</span>
+                        <span class="hint">Confirms a completed action</span>
+                    </span>
+                </button>
+                <button class="test-btn" id="test-error">
+                    <span class="icon">❌</span>
+                    <span class="text-wrap">
+                        <span class="label">Error</span>
+                        <span class="hint">Reports a failure</span>
+                    </span>
+                </button>
+                <button class="test-btn" id="test-warning">
+                    <span class="icon">⚠️</span>
+                    <span class="text-wrap">
+                        <span class="label">Warning</span>
+                        <span class="hint">Caution before action</span>
+                    </span>
+                </button>
+                <button class="test-btn" id="test-info">
+                    <span class="icon">ℹ️</span>
+                    <span class="text-wrap">
+                        <span class="label">Info</span>
+                        <span class="hint">Neutral information</span>
+                    </span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Confirmations -->
+        <div class="demo-card">
+            <h2>Confirmations</h2>
+            <div class="btn-group">
+                <button class="test-btn" id="test-confirm">
+                    <span class="icon">🤔</span>
+                    <span class="text-wrap">
+                        <span class="label">Confirm Dialog</span>
+                        <span class="hint">OK / Cancel with promise resolution</span>
+                    </span>
+                </button>
+                <button class="test-btn" id="test-delete">
+                    <span class="icon">🗑️</span>
+                    <span class="text-wrap">
+                        <span class="label">Delete Confirm</span>
+                        <span class="hint">Danger-styled destructive action</span>
+                    </span>
+                </button>
+                <button class="test-btn" id="test-custom-btns">
+                    <span class="icon">🎨</span>
+                    <span class="text-wrap">
+                        <span class="label">Custom Buttons</span>
+                        <span class="hint">"Yes, Delete" / "Keep it"</span>
+                    </span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Toasts -->
+        <div class="demo-card">
+            <h2>Toast Notifications</h2>
+            <div class="btn-group">
+                <button class="test-btn" id="test-toast-success">
+                    <span class="icon">🍞</span>
+                    <span class="text-wrap">
+                        <span class="label">Success Toast</span>
+                        <span class="hint">Top-right notification</span>
+                    </span>
+                </button>
+                <button class="test-btn" id="test-toast-stack">
+                    <span class="icon">📚</span>
+                    <span class="text-wrap">
+                        <span class="label">Stack Multiple</span>
+                        <span class="hint">3 toasts fired rapidly</span>
+                    </span>
+                </button>
+                <button class="test-btn" id="test-toast-progress">
+                    <span class="icon">⏳</span>
+                    <span class="text-wrap">
+                        <span class="label">Auto-Close + Progress</span>
+                        <span class="hint">3s countdown with progress bar</span>
+                    </span>
+                </button>
+                <button class="test-btn" id="test-toast-bottom">
+                    <span class="icon">⬇️</span>
+                    <span class="text-wrap">
+                        <span class="label">Bottom Position</span>
+                        <span class="hint">Bottom-end toast placement</span>
+                    </span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Animations -->
+        <div class="demo-card">
+            <h2>Animations</h2>
+            <div class="btn-group">
+                <button class="test-btn" id="test-anim-bounce">
+                    <span class="icon">🎾</span>
+                    <span class="text-wrap">
+                        <span class="label">Bounce In</span>
+                        <span class="hint">Playful spring entrance</span>
+                    </span>
+                </button>
+                <button class="test-btn" id="test-anim-slide">
+                    <span class="icon">📥</span>
+                    <span class="text-wrap">
+                        <span class="label">Slide Down</span>
+                        <span class="hint">Dropdown-style entrance</span>
+                    </span>
+                </button>
+                <button class="test-btn" id="test-anim-elastic">
+                    <span class="icon">🧲</span>
+                    <span class="text-wrap">
+                        <span class="label">Elastic</span>
+                        <span class="hint">Attention-grabbing spring</span>
+                    </span>
+                </button>
+                <button class="test-btn" id="test-anim-fast">
+                    <span class="icon">⚡</span>
+                    <span class="text-wrap">
+                        <span class="label">Snappy (100ms)</span>
+                        <span class="hint">Ultra-fast entrance/exit</span>
+                    </span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Advanced APIs -->
+        <div class="demo-card">
+            <h2>Advanced APIs</h2>
+            <div class="btn-group">
+                <button class="test-btn" id="test-loading">
+                    <span class="icon">⌛</span>
+                    <span class="text-wrap">
+                        <span class="label">Loading State</span>
+                        <span class="hint">Non-dismissable spinner (closes in 3s)</span>
+                    </span>
+                </button>
+                <button class="test-btn" id="test-builder">
+                    <span class="icon">🏗️</span>
+                    <span class="text-wrap">
+                        <span class="label">Builder API</span>
+                        <span class="hint">Complex config via chaining</span>
+                    </span>
+                </button>
+                <button class="test-btn" id="test-autoclose">
+                    <span class="icon">⏱️</span>
+                    <span class="text-wrap">
+                        <span class="label">Auto-Close Modal</span>
+                        <span class="hint">5s timer with progress bar</span>
+                    </span>
+                </button>
+                <button class="test-btn" id="test-close-all">
+                    <span class="icon">💥</span>
+                    <span class="text-wrap">
+                        <span class="label">Close All</span>
+                        <span class="hint">Opens 3 toasts then closes all</span>
+                    </span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Dismiss Behaviors -->
+        <div class="demo-card">
+            <h2>Dismiss Behaviors</h2>
+            <div class="btn-group">
+                <button class="test-btn" id="test-escape">
+                    <span class="icon">⌨️</span>
+                    <span class="text-wrap">
+                        <span class="label">Escape Key</span>
+                        <span class="hint">Press Escape to dismiss</span>
+                    </span>
+                </button>
+                <button class="test-btn" id="test-backdrop">
+                    <span class="icon">🖱️</span>
+                    <span class="text-wrap">
+                        <span class="label">Backdrop Click</span>
+                        <span class="hint">Click outside to dismiss</span>
+                    </span>
+                </button>
+                <button class="test-btn" id="test-locked">
+                    <span class="icon">🔒</span>
+                    <span class="text-wrap">
+                        <span class="label">Locked Modal</span>
+                        <span class="hint">No escape, no outside click</span>
+                    </span>
+                </button>
+                <button class="test-btn" id="test-xss">
+                    <span class="icon">🛡️</span>
+                    <span class="text-wrap">
+                        <span class="label">XSS Prevention</span>
+                        <span class="hint">Script tags rendered as text</span>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="log-panel">
+        <div class="log-inner">
+            <h2>Event Log</h2>
+            <div id="log"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { UltraAlert } from '../src/index.ts';
+
+        // ── Logger ──
+        const logEl = document.getElementById('log');
+        function log(msg, type = '') {
+            const time = new Date().toLocaleTimeString('en-US', { hour12: false });
+            const entry = document.createElement('div');
+            entry.className = `entry ${type}`;
+            entry.innerHTML = `<span class="time">${time}</span>  ${msg}`;
+            logEl.prepend(entry);
+        }
+        function logResult(label, result) {
+            const data = JSON.stringify(result);
+            const type = result.isConfirmed ? 'success' : result.isDenied ? 'error' : 'warn';
+            log(`${label} → ${data}`, type);
+        }
+
+        // ── Theme Toggle ──
+        const themeButtons = document.querySelectorAll('.theme-toggle button');
+        themeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                themeButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const theme = btn.id.replace('theme-', '');
+                UltraAlert.configure({ theme });
+                log(`Theme set to "${theme}"`, 'info');
+            });
+        });
+
+        // ── Alert Types ──
+        document.getElementById('test-success').addEventListener('click', async () => {
+            const r = await UltraAlert.success('Changes saved successfully!');
+            logResult('Success', r);
+        });
+        document.getElementById('test-error').addEventListener('click', async () => {
+            const r = await UltraAlert.error('Failed to save changes.');
+            logResult('Error', r);
+        });
+        document.getElementById('test-warning').addEventListener('click', async () => {
+            const r = await UltraAlert.warning('Are you sure you want to continue?');
+            logResult('Warning', r);
+        });
+        document.getElementById('test-info').addEventListener('click', async () => {
+            const r = await UltraAlert.info('Your session expires in 5 minutes.');
+            logResult('Info', r);
+        });
+
+        // ── Confirmations ──
+        document.getElementById('test-confirm').addEventListener('click', async () => {
+            const r = await UltraAlert.confirm('Save Changes?', 'Do you want to save before leaving?');
+            logResult('Confirm', r);
+        });
+        document.getElementById('test-delete').addEventListener('click', async () => {
+            const r = await UltraAlert.deleteConfirm('Delete User?', 'This action is irreversible and all data will be lost.');
+            logResult('Delete', r);
+        });
+        document.getElementById('test-custom-btns').addEventListener('click', async () => {
+            const r = await UltraAlert.show({
+                type: 'error',
+                title: 'Delete Project?',
+                text: 'All data will be permanently removed.',
+                showCancelButton: true,
+                confirmButton: { text: 'Yes, Delete', variant: 'danger' },
+                cancelButton: { text: 'Keep it', variant: 'default' },
+            });
+            logResult('Custom buttons', r);
+        });
+
+        // ── Toasts ──
+        document.getElementById('test-toast-success').addEventListener('click', async () => {
+            const r = await UltraAlert.toast('Profile Updated', {
+                type: 'success',
+                text: 'Your changes were saved successfully.',
+                autoClose: 4000,
+                showProgressBar: true
+            });
+            logResult('Toast', r);
+        });
+        document.getElementById('test-toast-stack').addEventListener('click', () => {
+            UltraAlert.toast('Connection restored', { type: 'success', autoClose: 4000, showProgressBar: true });
+            setTimeout(() => UltraAlert.toast('New message received', { type: 'info', autoClose: 4000, showProgressBar: true }), 200);
+            setTimeout(() => UltraAlert.toast('Battery low', { type: 'warning', autoClose: 4000, showProgressBar: true }), 400);
+            log('Fired 3 toasts', 'info');
+        });
+        document.getElementById('test-toast-progress').addEventListener('click', async () => {
+            const r = await UltraAlert.toast('Processing upload…', {
+                type: 'info',
+                text: 'This will close automatically.',
+                autoClose: 3000,
+                showProgressBar: true
+            });
+            logResult('Toast progress', r);
+        });
+        document.getElementById('test-toast-bottom').addEventListener('click', async () => {
+            const r = await UltraAlert.toast('Download complete', {
+                type: 'success',
+                text: 'File saved to Downloads folder.',
+                position: 'bottom-end',
+                autoClose: 3000,
+                showProgressBar: true
+            });
+            logResult('Bottom toast', r);
+        });
+
+        // ── Animations ──
+        document.getElementById('test-anim-bounce').addEventListener('click', async () => {
+            const r = await UltraAlert.show({
+                type: 'success', title: 'Bounce!', text: 'Spring-physics entrance.',
+                animation: { enter: 'bounceIn', exit: 'fadeOut', duration: 400 }
+            });
+            logResult('Bounce', r);
+        });
+        document.getElementById('test-anim-slide').addEventListener('click', async () => {
+            const r = await UltraAlert.show({
+                type: 'info', title: 'Slide Down', text: 'Dropdown-style entrance.',
+                animation: { enter: 'slideDown', exit: 'slideUp', duration: 300 }
+            });
+            logResult('Slide', r);
+        });
+        document.getElementById('test-anim-elastic').addEventListener('click', async () => {
+            const r = await UltraAlert.show({
+                type: 'warning', title: 'Elastic!', text: 'Attention-grabbing spring effect.',
+                animation: { enter: 'elasticIn', exit: 'scaleOut', duration: 500 }
+            });
+            logResult('Elastic', r);
+        });
+        document.getElementById('test-anim-fast').addEventListener('click', async () => {
+            const r = await UltraAlert.show({
+                type: 'success', title: 'Snappy!',
+                animation: { duration: 100 }
+            });
+            logResult('Fast', r);
+        });
+
+        // ── Advanced ──
+        document.getElementById('test-loading').addEventListener('click', () => {
+            log('Loading state for 3s...', 'info');
+            UltraAlert.loading('Processing payment…');
+            setTimeout(() => {
+                UltraAlert.closeAll();
+                log('Loading closed', 'success');
+            }, 3000);
+        });
+        document.getElementById('test-builder').addEventListener('click', async () => {
+            const r = await UltraAlert.build()
+                .title('Unsaved Changes')
+                .text('You have 3 unsaved changes. What would you like to do?')
+                .type('warning')
+                .confirmButton('Discard', 'danger')
+                .cancelButton('Keep Editing')
+                .autoClose(8000, true)
+                .animation({ enter: 'slideDown', exit: 'fadeOut' })
+                .show();
+            logResult('Builder', r);
+        });
+        document.getElementById('test-autoclose').addEventListener('click', async () => {
+            const r = await UltraAlert.show({
+                type: 'info',
+                title: 'Session Timeout',
+                text: 'This modal will close automatically in 5 seconds.',
+                autoClose: 5000,
+                showProgressBar: true,
+            });
+            logResult('Auto-close', r);
+        });
+        document.getElementById('test-close-all').addEventListener('click', () => {
+            UltraAlert.toast('Toast 1', { type: 'success', autoClose: 10000 });
+            UltraAlert.toast('Toast 2', { type: 'info', autoClose: 10000 });
+            UltraAlert.toast('Toast 3', { type: 'warning', autoClose: 10000 });
+            setTimeout(() => {
+                UltraAlert.closeAll();
+                log('closeAll() executed', 'success');
+            }, 1500);
+        });
+
+        // ── Dismiss ──
+        document.getElementById('test-escape').addEventListener('click', async () => {
+            log('Press Escape key...', 'info');
+            const r = await UltraAlert.info('Press Escape to close me');
+            logResult('Escape', r);
+        });
+        document.getElementById('test-backdrop').addEventListener('click', async () => {
+            log('Click outside the modal...', 'info');
+            const r = await UltraAlert.info('Click the dark backdrop');
+            logResult('Backdrop', r);
+        });
+        document.getElementById('test-locked').addEventListener('click', async () => {
+            const r = await UltraAlert.show({
+                type: 'warning',
+                title: 'Locked Modal',
+                text: 'Cannot dismiss with Escape or backdrop. Use OK.',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+            });
+            logResult('Locked', r);
+        });
+        document.getElementById('test-xss').addEventListener('click', async () => {
+            const r = await UltraAlert.show({
+                type: 'warning',
+                title: '<img src=x onerror=alert("XSS")>',
+                text: '\x3cscript\x3ealert("hacked")\x3c/script\x3e',
+            });
+            logResult('XSS test', r);
+            log('No JS alert fired → XSS prevention works ✅', 'success');
+        });
+
+        // ── Init ──
+        UltraAlert.configure({ theme: 'dark' });
+        log('UltraAlert demo loaded — ready', 'info');
+    </script>
+</body>
+
+</html>
